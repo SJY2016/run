@@ -3,9 +3,8 @@ local modname = ...
 _G[modname] = _M
 package.loaded[modname] = _M
 
-local rpath,path  =require 'sys.tools'.get_path(modname)
-local classDlg = require (rpath .. 'iup.dlg').Class
-local classLang = require  (rpath .. 'lang').Class
+local classDlg = require 'sys.iup.dlg'.Class
+local classLang = require 'sys.lang'.Class
 local iup = iup
 local message = iup.Message
 
