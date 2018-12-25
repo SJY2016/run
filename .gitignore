@@ -1,0 +1,12 @@
+env/*.dll
+*.exe
+env/socket.lua
+env/mime.lua
+env/ltn12.lua
+env/convert.lua
+env/login/
+env/res/
+env/service/
+env/socket/
+env/Project/
+*.zip
