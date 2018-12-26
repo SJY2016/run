@@ -25,6 +25,7 @@ local setting = SETTING
 local sysPage = PAGE
 local sysKeyword = KEYWORD
 local sysLang = LANG
+local print = print
 
 _ENV = _M
 
@@ -32,7 +33,6 @@ function load()
 	sysPage.init()
 	setting.init()
 	sysPage.update()
-	-- browser.load()
 	setting.update()
 end
 
