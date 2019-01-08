@@ -3,51 +3,32 @@ local modname = ...
 _G[modname] = _M
 package.loaded[modname] = _M
 
-local setmetatable = setmetatable
-local ap = ap
+local lfs = require 'lfs'
 
-local sysDisk = require 'sys.disk'
+local ap = ap
+local g = _G
+local setmetatable = setmetatable
+local loadfile = loadfile
+local type = type
 
 _ENV = _M
 
 local file = 'app.lua'
--- sysDisk.file_require(file)
-
 local app = {}
 
 function init()
 	app = {}
-	if app.dat and app.dat.onInit  then 
-		app.dat.onInit()
-	end
+	setmetatable(app,{__index = g})
 end
 
 function load()
-	
+	local f = loadfile(file,'bt',app)
+	if type(f) == 'function' then 
+		f()
+	end
 end
 
--- local app = {Ids = {}} --
-
-ap.getApp = function()
-	return app
-end
-
--- app.getIdDat = function(id)
-	-- local t = {}
-	-- setmetatable(t,{__index = app.Ids[id] or {}})
-	-- return t
--- end
-
--- app.addIdDat = function(id,dat)
-	-- app.Ids[id] = dat
--- end
-
--- app.initIds = function(ids)
-	-- app.Ids = ids
--- end
-
-app.init = function(dat)
-	app.dat = dat
+function update()
 end
 
 

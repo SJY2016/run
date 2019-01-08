@@ -15,6 +15,7 @@ require 'sys.msg.on_sys_msg'
 local sysCmd = require 'sys.cmd'
 local sysMenu = require 'sys.menu.main'
 local sysToolbar = require 'sys.toolbar.main'
+local sysApp = require 'sys.app'
 
 
 
@@ -25,16 +26,18 @@ function init()
 	sysCmd.init()
 	sysMenu.init()
 	sysToolbar.init()
+	sysApp.init()
 end
 
 function load()
-	
+	sysApp.load()
 end
 
 
 function update()
 	sysMenu.update()
 	sysToolbar.update()
+	sysApp.update()
 end
 
 
