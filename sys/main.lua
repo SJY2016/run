@@ -1,45 +1,51 @@
-
-
 ------------------------------------------------------------------------------
-require"sys.msg.on_sys_msg";
-------------------------------------------------------------------------------
-CODE  =  require 'sys.code'
-TOOLS = require 'sys.tools'
+ap = {}
 IUP = require 'sys.iup'
-DISK = require 'sys.disk'
-ZIP = require 'sys.zip'
-
-SETTING =  require 'sys.setting'
-KEYWORD =  require 'sys.keyword'
-LANG = require 'sys.lang'
-PAGE = require 'sys.page'
-
-
 ------------------------------------------------------------------------------
 local _M = {}
 local modname = ...
 _G[modname] = _M
 package.loaded[modname] = _M
 
-local setting = SETTING
-local sysPage = PAGE
-local sysKeyword = KEYWORD
-local sysLang = LANG
+local type = type
 local print = print
+require 'sys.ap'
+require 'sys.msg.on_sys_msg'
+
+local sysCmd = require 'sys.cmd'
+local sysMenu = require 'sys.menu.main'
+local sysToolbar = require 'sys.toolbar.main'
+
+
 
 _ENV = _M
 
+local cmds = {}
+function init()
+	sysCmd.init()
+	sysMenu.init()
+	sysToolbar.init()
+end
+
 function load()
-	sysPage.init()
-	setting.init()
-	sysPage.update()
-	setting.update()
+	
 end
 
 
-load();
+function update()
+	sysMenu.update()
+	sysToolbar.update()
+end
 
 
+
+
+reload  = function()
+	init()
+	load()
+	update()
+end
+reload()
 
 
 

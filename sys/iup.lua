@@ -3,8 +3,6 @@ local modname = ...
 _G[modname] = _M
 package.loaded[modname] = _M
 
-local classDlg = require 'sys.iup.dlg'.Class
-local classLang = require 'sys.lang'.Class
 local iup = iup
 local message = iup.Message
 

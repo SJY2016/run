@@ -6,7 +6,6 @@ _G[modname] = _M
 package.loaded[modname] = _M
 
 local CODE  =  require 'sys.code'
-
 local lfs = require 'lfs'
 local require =require
 
@@ -74,7 +73,7 @@ end
 
 --file = 'c/b/e.lua'
 --支持绝对路径和相对路径的加载
-function file_require(file)
+function file_require(file,env)
 	local str = file;
 	if file_exist(file) then 
 		str = string.gsub(str,'/','.')
@@ -99,24 +98,7 @@ return {
 	size = 39
 };
 ]]
-function file_info(file)
-	-- return LFS.get_info(file)
-end
 
---[[
-	return {
-		change = attr.modification,--最新数据修改时间
-		status = attr.change,--最新状态改变时间
-		access = attr.access,--最新使用时间
-	} 
-]]
-function file_time(file)
-	-- return LFS.get_time(file)
-end
-
-function file_mtime(file)
-	-- return LFS.get_time(file).change
-end
 
 --剪切文件
 function file_shear(src,dst)
@@ -249,35 +231,7 @@ function mkdir_rec(path)
 	)
 end
 
-function PrintTable( tbl , level, filteDefault)
-  local msg = ""
-  filteDefault = filteDefault or true --默认过滤关键字（DeleteMe, _class_type）
-  level = level or 1
-  local indent_str = ""
-  for i = 1, level do
-    indent_str = indent_str.."  "
-  end
 
-  print(indent_str .. "{")
-  for k,v in pairs(tbl) do
-    if filteDefault then
-      if k ~= "_class_type" and k ~= "DeleteMe" then
-        local item_str = string.format("%s%s = %s", indent_str .. " ",tostring(k), tostring(v))
-        print(item_str)
-        if type(v) == "table" then
-          PrintTable(v, level + 1)
-        end
-      end
-    else
-      local item_str = string.format("%s%s = %s", indent_str .. " ",tostring(k), tostring(v))
-      print(item_str)
-      if type(v) == "table" then
-        PrintTable(v, level + 1)
-      end
-    end
-  end
-  print(indent_str .. "}")
-end
 
 
 --file = 'a/b'
@@ -326,4 +280,14 @@ end
 ---------------------------------------------------------------------------
 function quit()
 	exit()
+end
+
+function start(file)
+	file = string.gsub(file,'/','\\')
+	execute('start " " "'..file..'"\n');
+end
+
+function restart(file)
+	start(file)
+	quit()
 end

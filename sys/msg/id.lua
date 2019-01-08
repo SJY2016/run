@@ -4,19 +4,18 @@ _G[modname] = _M
 package.loaded[modname] = _M
 
 local msg = require 'sys.msg'
+
 local ID = ID
+local type = type
+local print = print
+local pairs = pairs
 
 _ENV = _M
 
 local IdTime = ID;
 local IdCmd = ID;
-local RegTime = false;
-local RegCommand = false;
-local RegFrmCommand = false;
 
-local IdsTimer = {};--{[id]=function} --时间ID
-local IdsCmd = {};--{[id]=function} --视图ID
-local IdsFrmCmd = {};--{[id]=function} --非视图ID
+local Ids = {}
 
 function get_timer_id()
 	IdTime=IdTime+1;
@@ -28,57 +27,25 @@ function get_command_id()
 	return IdCmd;
 end
 
-function timers()
-	return IdsTimer;
+--tab = {action = function,...} --action 必定存在，如果不存在则无法响应相关的函数
+function map(id,tab)
+	Ids[id] = tab
 end
 
-function commands()
-	return IdsCmd;
-end
-
-function frm_commands()
-	return IdsFrmCmd;
-end
-
-function set_timer(fun)
-	local id = get_timer_id()
-	timers()[id] = fun;
-	if not RegTime then 
-		RegTime = true
-		msg.add('on_timer',function(scene,id)
-			local fun = timers()[id]
-			if  type(fun) == 'function' then 
-				return fun(scene)
-			end
-		end)
+local function run(id,sc)
+	local dat =  Ids[id]
+	if type(dat) ~= 'table' then return end 
+	if type(dat.action) ~= 'function' then return end 
+	if sc and dat.view then 
+		return dat.action(sc)
+	elseif not sc and dat.frame then 
+		return dat.action()
 	end
 end
 
-function set_command(fun)
-	local id = get_command_id()
-	commands()[id] = fun;
-	if not RegCommand then 
-		RegCommand = true
-		msg.add('on_command',function()
-			local fun = commands()[id]
-			if  type(fun) == 'function' then 
-				return fun(scene)
-			end
-		end)
-	end
-end
+msg.add('on_command',run)
+msg.add('frm_on_command',run)
+msg.add('on_timer',run)
 
-function set_frm_command(fun)
-	local id = get_command_id()
-	frm_commands()[id] =fun;
-	if not RegFrmCommand then 
-		RegFrmCommand = true
-		msg.add('frm_on_command',function(id)
-			local fun = frm_commands()[id]
-			if  type(fun) == 'function' then 
-				return fun()
-			end
-		end)
-	end
-end
+-------------------------------------------------------------------------------------------------------
 
