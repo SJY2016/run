@@ -4,7 +4,7 @@
 *Begin:
 *Description:
 *	
-*Import Update Record:��Time Content��
+*Import Update Record:
 */
 --]]
 --[[
@@ -15,11 +15,12 @@ local modname = ...
 _G[modname] = _M
 package.loaded[modname] = _M
 
-local trace_out = trace_out;
 local string = string
 local print = print
 local open = io.open
 local tostring = tostring
+local trace_out = trace_out
+
 local ap = ap
 
 _ENV = _M
@@ -27,12 +28,12 @@ _ENV = _M
 --------------------------------------------------
 local turn_fileDat;
 local path ='menu/'
-
+local styleFile = 'menu/main.mnu'
 --------------------------------------------------
 
 local function init_dat()
 	local dat;
-	local styleFile = 'menu\\main.mnu'
+	
 	return function ()
 		dat = turn_fileDat(styleFile)
 	end,function()
@@ -46,23 +47,8 @@ init,get = init_dat()
 local function get_posTab(tab,st)
 	if st == 1 then 
 		return  tab
-	else 
-		return get_posTab(tab[#tab],st-1)
-	end
-end
-
-local function get_infoTab(dat,st,lev,pathDat) 
-	local name = dat[#dat].name
-	if not pathDat then 
-		pathDat = dat
-	end
-	if not pathDat[name] then 
-		pathDat[name]  = {}
-	end
-	if lev == st then 	
-		return  pathDat[name]
-	else 
-		return get_infoTab(dat[#dat],st,lev+1,pathDat[name]) 
+	else
+		return get_posTab(tab[#tab] or tab,st-1)
 	end
 end
 
@@ -80,13 +66,19 @@ turn_fileDat =  function (file)
 	local file =open(file)
 	if not file then return end 
 	local name,line,curTab,tempTab;
+	local linePos = 0
 	repeat 
 		line = file:read('*l') 
-		local st = string.find(line or '','%S') 
+		linePos = linePos + 1
+		local st = string.find(line or '','%S')
 		if st then 
-			name = ap.trim(line) 		
+			local headStr = string.sub(line,1,st -1)
+			if string.find(headStr,' ') then 
+				trace_out('File :\"' .. styleFile  .. '\" , Line : "' .. linePos .. '\" !  Format Error (Please use the \"Tab\" key for typesetting . ) !\n')
+			end
+			name = ap.trim(line) 	--	修剪字符串 去掉前后的空字符
 			tempTab = {name =tostring( name)}
-			curTab = get_posTab(dat,st,name)
+			curTab = get_posTab(dat,st,linePos)
 			curTab[#curTab+1] = tempTab
 		end
 	until not line 
