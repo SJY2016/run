@@ -35,11 +35,11 @@ end
 local function run(id,sc)
 	local dat =  Ids[id]
 	if type(dat) ~= 'table' then return end 
-	if type(dat.action) ~= 'function' then return end 
+	if type(dat.onClick) ~= 'function' then return end 
 	if sc and dat.view then 
-		return dat.action(sc)
+		return dat.onClick(sc)
 	elseif not sc and dat.frame then 
-		return dat.action()
+		return dat.onClick()
 	end
 end
 
