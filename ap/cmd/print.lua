@@ -1,1 +1,0 @@
-print_helloWorld = function() trace_out('Hello World;\n') end
