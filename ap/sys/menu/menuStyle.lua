@@ -78,7 +78,7 @@ turn_fileDat =  function (file)
 			end
 			name = ap.trim(line) 	--	修剪字符串 去掉前后的空字符
 			tempTab = {name =tostring( name)}
-			curTab = get_posTab(dat,st,linePos)
+			curTab = get_posTab(dat,st)
 			curTab[#curTab+1] = tempTab
 		end
 	until not line 
